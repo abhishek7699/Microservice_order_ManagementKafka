@@ -1,0 +1,6 @@
+/Users/saiabhishekyeluri/Desktop/JAVA/Microservice-order-kafka_managment/inventory-service/src/main/java/com/orderSystem/inventory/service/ProductService.java
+/Users/saiabhishekyeluri/Desktop/JAVA/Microservice-order-kafka_managment/inventory-service/src/main/java/com/orderSystem/inventory/InventoryServiceApplication.java
+/Users/saiabhishekyeluri/Desktop/JAVA/Microservice-order-kafka_managment/inventory-service/src/main/java/com/orderSystem/inventory/model/Product.java
+/Users/saiabhishekyeluri/Desktop/JAVA/Microservice-order-kafka_managment/inventory-service/src/main/java/com/orderSystem/inventory/dto/ProductResponseDto.java
+/Users/saiabhishekyeluri/Desktop/JAVA/Microservice-order-kafka_managment/inventory-service/src/main/java/com/orderSystem/inventory/repository/ProductRepository.java
+/Users/saiabhishekyeluri/Desktop/JAVA/Microservice-order-kafka_managment/inventory-service/src/main/java/com/orderSystem/inventory/controller/ProductController.java

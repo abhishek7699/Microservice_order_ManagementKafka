@@ -1,0 +1,8 @@
+com/orderSystem/inventory/model/Product$ProductBuilder.class
+com/orderSystem/inventory/controller/ProductController.class
+com/orderSystem/inventory/InventoryServiceApplication.class
+com/orderSystem/inventory/repository/ProductRepository.class
+com/orderSystem/inventory/service/ProductService.class
+com/orderSystem/inventory/model/Product.class
+com/orderSystem/inventory/dto/ProductResponseDto.class
+com/orderSystem/inventory/dto/ProductResponseDto$ProductResponseDtoBuilder.class
