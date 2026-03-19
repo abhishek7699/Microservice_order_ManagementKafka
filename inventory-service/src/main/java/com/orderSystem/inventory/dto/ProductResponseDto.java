@@ -15,6 +15,6 @@ import java.util.UUID;
 public class ProductResponseDto {
     private UUID id;
     private String name;
-    private BigDecimal price;
+    private double price;
     private int stockQuantity;
 }

@@ -29,7 +29,7 @@ public class Product {
 
     @NotNull
     @Column(nullable = false)
-    private BigDecimal price;
+    private double price;
 
     @NotNull
     @Column(nullable = false)

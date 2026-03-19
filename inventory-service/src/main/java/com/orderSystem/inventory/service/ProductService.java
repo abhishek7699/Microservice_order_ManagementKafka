@@ -8,6 +8,7 @@ import com.orderSystem.inventory.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,6 +52,13 @@ public class ProductService {
         inventoryUpdatedEvent.setOrderId(event.getOrderId());
 
         if(orderStock<=inventoryStock){
+
+            double total_price= (product.getPrice()) * (event.getQuantity());
+
+
+            inventoryUpdatedEvent.setTotalPrice(total_price);
+
+
 
             int newInventoryStock= inventoryStock-orderStock;
 

@@ -8,9 +8,14 @@ import com.orderSystem.order.kafka.OrderCreatedEvent;
 import com.orderSystem.order.kafka.OrderEventProducer;
 import com.orderSystem.order.model.Order;
 import com.orderSystem.order.repository.OrderRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +40,7 @@ public class OrderService {
                 .quantity(request.getQuantity())
                 .build();
 
-        Order saved = orderRepository.save(order);
+         orderRepository.save(order);
 
         OrderCreatedEvent orderCreatedEvent= new OrderCreatedEvent();
         orderCreatedEvent.setOrderId(order.getId());
@@ -45,13 +50,17 @@ public class OrderService {
         orderEventProducer.publishOrderCreated(orderCreatedEvent);
 
 
+        Order retrieved = orderRepository.findById(order.getId())
+                .orElseThrow(() -> new RuntimeException("Order not found"));;
+
+
         return OrderResponseDto.builder()
-                .orderId(saved.getId())
-                .customerId(saved.getCustomerId())
-                .productId(saved.getProductId())
-                .quantity(saved.getQuantity())
-                .status(saved.getStatus())
-                .totalPrice(saved.getTotalPrice())
+                .orderId(retrieved.getId())
+                .customerId(retrieved.getCustomerId())
+                .productId(retrieved.getProductId())
+                .quantity(retrieved.getQuantity())
+                .status(retrieved.getStatus())
+                .totalPrice(retrieved.getTotalPrice())
                 .build();
     }
 
@@ -62,24 +71,22 @@ public class OrderService {
 
         order.setStatus(Order.OrderStatus.valueOf(inventoryUpdatedEvent.getStatus()));
 
-        order.setTotalPrice();
+        order.setTotalPrice(inventoryUpdatedEvent.getTotalPrice());
 
 
 
         Order saved = orderRepository.save(order);
 
-        OrderResponseDto.builder()
-                .orderId(saved.getId())
-                .customerId(saved.getCustomerId())
-                .productId(saved.getProductId())
-                .quantity(saved.getQuantity())
-                .status(saved.getStatus())
-                .totalPrice(saved.getTotalPrice())
-                .build();
 
 
 
 
 
+
+    }
+
+    public Order viewOrder(@Valid UUID id) {
+
+        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order not found"));
     }
 }

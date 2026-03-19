@@ -39,7 +39,7 @@ public class Order {
     @Builder.Default
     private OrderStatus status = OrderStatus.PENDING;
 
-    private BigDecimal totalPrice;
+    private double totalPrice;
 
     public enum OrderStatus {
         PENDING, CONFIRMED, FAILED

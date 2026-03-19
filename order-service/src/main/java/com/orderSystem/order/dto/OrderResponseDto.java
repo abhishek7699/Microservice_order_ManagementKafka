@@ -19,5 +19,5 @@ public class OrderResponseDto {
     private String productId;
     private int quantity;
     private OrderStatus status;
-    private BigDecimal totalPrice;
+    private double totalPrice;
 }
