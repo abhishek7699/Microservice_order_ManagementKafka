@@ -12,6 +12,16 @@ services:
       - "5433:5432"
     volumes:
       - inventory-postgres-data:/var/lib/postgresql/data
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: inventory-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5051:80"
+    depends_on:
+      - postgres
 
 #  zookeeper:
 #    image: confluentinc/cp-zookeeper:7.5.0

@@ -1,6 +1,7 @@
 package com.orderSystem.inventory.kafka;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.orderSystem.inventory.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,9 +20,9 @@ public class OrderEventConsumer {
     ProductService productService;
 
     @KafkaListener(topics = "order.created", groupId = "inventory-group")
-    public void handleOrderCreated(OrderCreatedEvent event){
+    public void handleOrderCreated(OrderCreatedEvent event) throws JsonProcessingException {
 
-
+        //throw new RuntimeException("Simulating failure for DLQ test");
 
         log.info("Received order.created event for orderId: {}", event.getOrderId());
 

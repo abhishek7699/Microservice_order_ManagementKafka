@@ -1,5 +1,6 @@
 package com.orderSystem.order.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.orderSystem.order.dto.OrderRequestDto;
 import com.orderSystem.order.dto.OrderResponseDto;
 import com.orderSystem.order.model.Order;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
+
+import static org.yaml.snakeyaml.tokens.Token.ID.Key;
 
 @RestController
 @RequestMapping("/orders")
@@ -27,8 +30,8 @@ public class OrderController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponseDto> placeOrder(@Valid @RequestBody OrderRequestDto request) {
-        OrderResponseDto response = orderService.placeOrder(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<OrderResponseDto> placeOrder(@RequestHeader("Idempotency-key") String key,@Valid @RequestBody OrderRequestDto request) throws JsonProcessingException {
+        return  orderService.placeOrder(request,key);
+
     }
 }

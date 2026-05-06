@@ -1,14 +1,18 @@
 package com.orderSystem.inventory.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.orderSystem.inventory.dto.ProductResponseDto;
 import com.orderSystem.inventory.kafka.InventoryUpdatedEvent;
 import com.orderSystem.inventory.kafka.OrderCreatedEvent;
 import com.orderSystem.inventory.model.Product;
 import com.orderSystem.inventory.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -18,6 +22,10 @@ import java.util.UUID;
 public class ProductService {
 
     private final ProductRepository productRepository;
+
+    private final StringRedisTemplate redisTemplate;
+
+    private final ObjectMapper objectMapper;
 
     public List<ProductResponseDto> getAllProducts() {
         return productRepository.findAll().stream()
@@ -38,7 +46,19 @@ public class ProductService {
                 .build();
     }
 
-    public InventoryUpdatedEvent processOrder(OrderCreatedEvent event){
+    public InventoryUpdatedEvent processOrder(OrderCreatedEvent event) throws JsonProcessingException {
+
+
+        String redisKey="orderId"+event.getOrderId();
+
+        String cached= redisTemplate.opsForValue().get(redisKey);
+        if(cached!=null){
+            InventoryUpdatedEvent cacheDto= objectMapper.readValue(cached, InventoryUpdatedEvent.class);
+
+            return cacheDto;
+        }
+
+
         int orderStock= event.getQuantity();
 
         Product product=productRepository.findById(UUID.fromString(event.getProductId()))
@@ -68,6 +88,7 @@ public class ProductService {
 
 
              inventoryUpdatedEvent.setStatus("CONFIRMED");
+             redisTemplate.opsForValue().set(redisKey,objectMapper.writeValueAsString(inventoryUpdatedEvent), Duration.ofHours(24));
              return inventoryUpdatedEvent;
 
         }
