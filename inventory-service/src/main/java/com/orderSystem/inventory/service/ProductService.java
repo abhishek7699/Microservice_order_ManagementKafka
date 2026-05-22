@@ -2,6 +2,7 @@ package com.orderSystem.inventory.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.orderSystem.inventory.dto.ProductResponseDto;
 import com.orderSystem.inventory.kafka.InventoryUpdatedEvent;
 import com.orderSystem.inventory.kafka.OrderCreatedEvent;
@@ -98,6 +99,9 @@ public class ProductService {
 
         }
 
+    }
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
     }
 
 }

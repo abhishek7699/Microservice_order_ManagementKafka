@@ -2,6 +2,7 @@
 package com.orderSystem.inventory.controller;
 
 import com.orderSystem.inventory.dto.ProductResponseDto;
+import com.orderSystem.inventory.model.Product;
 import com.orderSystem.inventory.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+
+import org.springframework.http.HttpStatus;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -27,5 +30,10 @@ public class ProductController {
         return productService.getProductById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(product));
     }
 }
