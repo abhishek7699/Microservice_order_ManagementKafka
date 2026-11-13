@@ -224,6 +224,29 @@ Health endpoints (each service):
 
 ---
 
+## Run locally (Kubernetes on kind)
+
+Runs the same three services, Kafka, Postgres and Redis on a local [kind](https://kind.sigs.k8s.io/) cluster. Images are built for arm64 on your machine, so this works on Apple Silicon without any registry.
+
+**Prerequisites:** Docker Desktop (running), `kind`, `kubectl`, JDK 17 and Maven, `python3`, `curl`.
+
+```bash
+# Create the cluster (if missing), build the jars and images, load them, deploy, and run the smoke test
+k8s-local/local-up.sh
+
+# Gateway is at http://localhost:8080 (no port-forward needed)
+curl http://localhost:8080/products
+
+# Delete the cluster
+k8s-local/local-down.sh
+```
+
+If port 8080 is already in use on your machine, pick another port: `GATEWAY_PORT=8095 k8s-local/local-up.sh`. The port is fixed when the cluster is created, so run `local-down.sh` first to change it later.
+
+The smoke test (`k8s-local/smoke-test.sh`) creates a product, places an order with an `Idempotency-key` header, repeats the request to check idempotency, and waits for the order to reach `CONFIRMED`. Manifests live in `k8s-local/` and are copies of `k8s/` with local changes (NodePort instead of LoadBalancer, `imagePullPolicy: IfNotPresent`, and locally built `:local` images). The GKE manifests in `k8s/` are unchanged. Local database data does not survive a pod restart.
+
+---
+
 ## API Reference
 
 All requests go through the API Gateway on port `8080`.
